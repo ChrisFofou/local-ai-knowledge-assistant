@@ -40,6 +40,7 @@ Retrieved Context
 Grounded Answer
 
 ## Technology Stack
+
 - Python
 - PyTorch
 - Sentence Transformers
