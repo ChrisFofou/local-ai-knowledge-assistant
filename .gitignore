@@ -43,3 +43,12 @@ secrets/
 # Logs and temporary files
 *.log
 .DS_Store
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Editor temporary files
+*.swp
+*.swo

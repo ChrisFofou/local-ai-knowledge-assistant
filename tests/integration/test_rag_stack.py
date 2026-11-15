@@ -1,5 +1,5 @@
-import torch
 import chromadb
+import torch
 from sentence_transformers import SentenceTransformer
 
 MODEL_NAME = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
@@ -20,48 +20,29 @@ print("\n=== Connecting to ChromaDB ===")
 client = chromadb.HttpClient(host="localhost", port=8000)
 
 collection = client.create_collection(
-    name="setup_validation",
-    metadata={"description": "Temporary RAG setup validation"}
+    name="setup_validation", metadata={"description": "Temporary RAG setup validation"}
 )
 
 documents = [
     "Photovoltaic inverters convert DC electricity from solar panels into AC electricity.",
     "Ein Wechselrichter wandelt den Gleichstrom von Solarmodulen in Wechselstrom um.",
-    "Retrieval augmented generation combines document retrieval with language models."
+    "Retrieval augmented generation combines document retrieval with language models.",
 ]
 
-embeddings = model.encode(
-    documents,
-    normalize_embeddings=True,
-    convert_to_numpy=True
-)
+embeddings = model.encode(documents, normalize_embeddings=True, convert_to_numpy=True)
 
-collection.add(
-    ids=["doc1", "doc2", "doc3"],
-    documents=documents,
-    embeddings=embeddings.tolist()
-)
+collection.add(ids=["doc1", "doc2", "doc3"], documents=documents, embeddings=embeddings.tolist())
 
 print("Documents stored:", collection.count())
 
 print("\n=== Semantic Search ===")
 query = "How does a solar inverter work?"
 
-query_embedding = model.encode(
-    query,
-    normalize_embeddings=True,
-    convert_to_numpy=True
-)
+query_embedding = model.encode(query, normalize_embeddings=True, convert_to_numpy=True)
 
-results = collection.query(
-    query_embeddings=[query_embedding.tolist()],
-    n_results=2
-)
+results = collection.query(query_embeddings=[query_embedding.tolist()], n_results=2)
 
-for document, distance in zip(
-    results["documents"][0],
-    results["distances"][0]
-):
+for document, distance in zip(results["documents"][0], results["distances"][0], strict=True):
     print(f"Distance: {distance:.4f}")
     print("Document:", document)
     print()
